@@ -23,7 +23,7 @@ class LifeCycleDemo extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log("[constructor");
+    console.log("[constructor]");
     console.log("State already set", this.state);
   }
 
@@ -42,11 +42,52 @@ class LifeCycleDemo extends React.Component {
     console.log("[shouldComponentUpdate", "Deciding to update");
     return true;
   }
+  getSnapshotBeforeUpdate(nextProps, nextState) {
+    console.log("[getSnapshotBeforeUpdate", "About to update...");
+    return `Time is ${Date.now()}`;
+  }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log("[componentDidUpdate]", "Updated");
+    console.log("   snapshot:", snapshot);
+  }
+
+  componentWillUnmount() {
+    console.log("[componentWillUnmount]", "Goodbye cruel world.");
+  }
+
+  handleClick = () => {
+    this.setState({ counter: this.state.counter + 1 });
+  };
+
+  causeErrorNextRender() {
+    this.setState({ causeError: true });
+  }
   render() {
-    return <div />;
+    console.log("[render]");
+    if (this.state.causeError) {
+      throw new Error("oh no!");
+    }
+    return (
+      <div>
+        <span>Counter: {this.state.counter}</span>
+        <br />
+        <br />
+        <button onClick={this.handleClick}>Click Me To Increment</button>
+        <br />
+        <br />
+        <button onClick={this.causeErrorNextRender}>
+          Click Me To Throw an Error
+        </button>
+      </div>
+    );
   }
 }
 
 const rootElement = document.getElementById("root");
-ReactDOM.render(<LifeCycleDemo />, rootElement);
+ReactDOM.render(
+  <ErrorCatcher>
+    <LifeCycleDemo />
+  </ErrorCatcher>,
+  rootElement
+);
