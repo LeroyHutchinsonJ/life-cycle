@@ -32,18 +32,19 @@ class LifeCycleDemo extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    console.log("[getDerivedStateFromProps");
+    console.log(" ");
+    console.log("[getDerivedStateFromProps]");
     console.log("   Next props:", nextProps);
     console.log("   Prev state:", prevState);
     return null;
   }
 
   shouldComponentUpdate(nextProps, prevProps) {
-    console.log("[shouldComponentUpdate", "Deciding to update");
+    console.log("[shouldComponentUpdate]", "Deciding to update");
     return true;
   }
   getSnapshotBeforeUpdate(nextProps, nextState) {
-    console.log("[getSnapshotBeforeUpdate", "About to update...");
+    console.log("[getSnapshotBeforeUpdate]", "About to update...");
     return `Time is ${Date.now()}`;
   }
 
@@ -60,9 +61,9 @@ class LifeCycleDemo extends React.Component {
     this.setState({ counter: this.state.counter + 1 });
   };
 
-  causeErrorNextRender() {
+  causeErrorNextRender = () => {
     this.setState({ causeError: true });
-  }
+  };
   render() {
     console.log("[render]");
     if (this.state.causeError) {
